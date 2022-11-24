@@ -18,9 +18,9 @@ import com.grayseal.triviaapp.navigation.QuizScreens
 
 @Composable
 fun QuizScreen(navController: NavController){
-    Box(modifier = Modifier
+    Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = Color(0xff6066d0))) {
+        ) {
         CancelButton(navController = navController)
     }
 
@@ -29,10 +29,10 @@ fun QuizScreen(navController: NavController){
 @Composable
 fun CancelButton(navController: NavController){
     Row(horizontalArrangement = Arrangement.Start) {
-        FilledTonalButton(
+        FilledIconButton(
             onClick = { navController.navigate(route = QuizScreens.QuizScreen.name)},
             shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xfffca82f))) {
+            colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color(0xfffca82f))) {
             Icon(
                 imageVector = Icons.Sharp.Cancel,
                 contentDescription = "Cancel",

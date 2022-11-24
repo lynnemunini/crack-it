@@ -8,6 +8,7 @@ import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,9 +33,8 @@ import com.grayseal.triviaapp.ui.theme.sonoFamily
 @Composable
 fun SplashScreen(navController: NavController){
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(top = 90.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ){
         Image(
             painter = painterResource(id = R.drawable.reading),
@@ -43,10 +43,10 @@ fun SplashScreen(navController: NavController){
         Spacer(modifier = Modifier.height(20.dp))
         Text(
             buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color(0xFF2b4e78), fontSize = 35.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(color = colors.onPrimary, fontSize = 35.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)) {
                     append("Learn The Fun Way with ")
                 }
-                withStyle(style = SpanStyle(color = Color(0xFFfca82f), fontSize = 40.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)) {
+                withStyle(style = SpanStyle(color = colors.primary, fontSize = 40.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)) {
                     append("Trivia App")
                 }
             },
@@ -54,7 +54,7 @@ fun SplashScreen(navController: NavController){
         )
         Text(
             "Interactive fun quizzes to help you learn interesting facts and shocking truths and help you get into a habit of learning.",
-            style = (TextStyle(fontSize = 15.sp, color = Color(0xFF92abca))),
+            style = (TextStyle(fontSize = 15.sp, color = colors.primaryVariant)),
             fontFamily = sonoFamily,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
@@ -68,9 +68,9 @@ fun SplashScreen(navController: NavController){
                 .height(70.dp)
                 .width(150.dp)
                 .clip(RoundedCornerShape(bottomEnd = 48.dp)),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xfffca82f)),
+            colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
             shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(3.dp, color = Color(0xfffdcd86))
+            border = BorderStroke(3.dp, color = colors.onSurface)
         ) {
             Text("Start Quiz", color = Color.White, fontFamily = sonoFamily, fontSize = 19.sp, fontWeight = FontWeight.SemiBold)
 
