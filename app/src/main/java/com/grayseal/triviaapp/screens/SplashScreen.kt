@@ -29,6 +29,8 @@ import com.grayseal.triviaapp.navigation.QuizScreens
 import com.grayseal.triviaapp.ui.theme.montserratFamily
 import com.grayseal.triviaapp.ui.theme.notoSansFamily
 import com.grayseal.triviaapp.ui.theme.sonoFamily
+import com.grayseal.triviaapp.utils.bounceClick
+import com.grayseal.triviaapp.utils.shakeClickEffect
 
 @Composable
 fun SplashScreen(navController: NavController){
@@ -67,7 +69,7 @@ fun SplashScreen(navController: NavController){
             modifier = Modifier
                 .height(70.dp)
                 .width(150.dp)
-                .clip(RoundedCornerShape(bottomEnd = 48.dp)),
+                .clip(RoundedCornerShape(bottomEnd = 30.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(3.dp, color = colors.onSurface)
@@ -75,7 +77,5 @@ fun SplashScreen(navController: NavController){
             Text("Start Quiz", color = Color.White, fontFamily = sonoFamily, fontSize = 19.sp, fontWeight = FontWeight.SemiBold)
 
         }
-
     }
-
 }
