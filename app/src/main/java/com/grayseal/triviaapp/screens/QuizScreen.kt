@@ -53,7 +53,7 @@ fun CancelButton(navController: NavController) {
         verticalAlignment = Alignment.Top
     ) {
         FilledTonalButton(
-            onClick = { navController.navigate(route = QuizScreens.QuizScreen.name) },
+            onClick = { navController.navigate(route = QuizScreens.SplashScreen.name) },
             modifier = Modifier.shakeClickEffect(),
             colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
             shape = RoundedCornerShape(100.dp),
