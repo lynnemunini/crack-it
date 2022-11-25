@@ -26,6 +26,7 @@ import com.grayseal.triviaapp.R
 import com.grayseal.triviaapp.navigation.QuizScreens
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 import com.grayseal.triviaapp.utils.shakeClickEffect
+import com.grayseal.triviaapp.widgets.ProceedButton
 import kotlinx.coroutines.NonDisposableHandle.parent
 
 
@@ -37,7 +38,7 @@ fun QuizScreen(navController: NavController) {
             .background(color = colors.secondary)
     ) {
         CancelButton(navController = navController)
-        QuestionCard()
+        QuestionCard(navController = navController)
     }
 
 }
@@ -67,16 +68,16 @@ fun CancelButton(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun QuestionCard() {
+fun QuestionCard(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .padding(20.dp)
     ) {
         val (illustration, card) = createRefs()
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .constrainAs(card) {
                     top.linkTo(illustration.bottom)
                     start.linkTo(parent.start)
@@ -87,14 +88,15 @@ fun QuestionCard() {
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 100.dp),
-                shape = RoundedCornerShape(20.dp),
+                    .padding(bottom = 120.dp),
+                shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(50.dp)
                 ){
                 Column(modifier = Modifier.padding(top = 80.dp, start = 10.dp, end = 10.dp)) {
-                    Text("NASA was invented in the military?", color = colors.onPrimary, fontSize = 25.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)
+                    //Text("NASA was invented in the military?", color = colors.onPrimary, fontSize = 25.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)
                 }
+                ProceedButton(action = "Next", navController = navController)
             }
         }
         Box(
@@ -111,12 +113,6 @@ fun QuestionCard() {
                 painter = painterResource(id = R.drawable.fall),
                 contentDescription = "Question Illustration"
             )
-
         }
     }
-}
-
-@Composable
-fun QuestionIllustration() {
-
 }

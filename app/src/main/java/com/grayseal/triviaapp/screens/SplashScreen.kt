@@ -31,11 +31,14 @@ import com.grayseal.triviaapp.ui.theme.notoSansFamily
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 import com.grayseal.triviaapp.utils.bounceClick
 import com.grayseal.triviaapp.utils.shakeClickEffect
+import com.grayseal.triviaapp.widgets.ProceedButton
 
 @Composable
 fun SplashScreen(navController: NavController){
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 90.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 90.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         Image(
@@ -62,20 +65,6 @@ fun SplashScreen(navController: NavController){
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
         }
-    Row(
-        modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom){
-        FilledTonalButton(
-            onClick = {navController.navigate(route = QuizScreens.QuizScreen.name)},
-            modifier = Modifier
-                .height(70.dp)
-                .width(150.dp)
-                .clip(RoundedCornerShape(bottomEnd = 30.dp)),
-            colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
-            shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(3.dp, color = colors.onSurface)
-        ) {
-            Text("Start Quiz", color = Color.White, fontFamily = sonoFamily, fontSize = 19.sp, fontWeight = FontWeight.SemiBold)
-
-        }
+    ProceedButton(action = "Start Quiz", navController = navController)
     }
-}
+
