@@ -127,7 +127,14 @@ fun DisplayQuestions(viewModel: QuestionsViewModel = hiltViewModel()){
 @Composable
 fun Questions(viewModel: QuestionsViewModel){
     val questions = viewModel.data.value.data?.toMutableList()
-    Text("Questions: ${questions?.size}")
-    Log.d("SIZE", "Questions: ${questions?.size}")
-
+    if(viewModel.data.value.loading == true){
+        Text("Loading")
+    }
+    else{
+        Text("Loading STOPPED")
+        questions?.forEach { questionItem ->
+            Log.d("Result", "Questions: ${questionItem.question}")
+        }
+        Text("Questions: ${questions?.size}")
+    }
 }
