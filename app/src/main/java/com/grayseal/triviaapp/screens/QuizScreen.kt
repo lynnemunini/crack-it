@@ -25,6 +25,8 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.grayseal.triviaapp.R
+import com.grayseal.triviaapp.component.QuestionTracker
+import com.grayseal.triviaapp.component.Questions
 import com.grayseal.triviaapp.navigation.QuizScreens
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 import com.grayseal.triviaapp.utils.shakeClickEffect
@@ -40,6 +42,7 @@ fun QuizScreen(navController: NavController) {
             .background(color = colors.secondary)
     ) {
         CancelButton(navController = navController)
+        QuestionTracker()
         QuestionCard(navController = navController)
     }
 
@@ -50,7 +53,7 @@ fun CancelButton(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp),
+            .padding(top = 20.dp, bottom = 20.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
     ) {
@@ -74,7 +77,7 @@ fun CancelButton(navController: NavController) {
 fun QuestionCard(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
         val (illustration, card) = createRefs()
         Box(
@@ -124,17 +127,3 @@ fun DisplayQuestions(viewModel: QuestionsViewModel = hiltViewModel()){
     Questions(viewModel = viewModel)
 }
 
-@Composable
-fun Questions(viewModel: QuestionsViewModel){
-    val questions = viewModel.data.value.data?.toMutableList()
-    if(viewModel.data.value.loading == true){
-        Text("Loading")
-    }
-    else{
-        Text("Loading STOPPED")
-        questions?.forEach { questionItem ->
-            Log.d("Result", "Questions: ${questionItem.question}")
-        }
-        Text("Questions: ${questions?.size}")
-    }
-}
