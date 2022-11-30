@@ -1,5 +1,6 @@
 package com.grayseal.triviaapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.grayseal.triviaapp.R
 import com.grayseal.triviaapp.navigation.QuizScreens
@@ -94,7 +96,7 @@ fun QuestionCard(navController: NavController) {
                 elevation = CardDefaults.cardElevation(50.dp)
                 ){
                 Column(modifier = Modifier.padding(top = 80.dp, start = 10.dp, end = 10.dp)) {
-                    //Text("NASA was invented in the military?", color = colors.onPrimary, fontSize = 25.sp, fontFamily = sonoFamily, fontWeight = FontWeight.Bold)
+                    DisplayQuestions()
                 }
                 ProceedButton(action = "Next", navController = navController)
             }
@@ -115,4 +117,17 @@ fun QuestionCard(navController: NavController) {
             )
         }
     }
+}
+
+@Composable
+fun DisplayQuestions(viewModel: QuestionsViewModel = hiltViewModel()){
+    Questions(viewModel = viewModel)
+}
+
+@Composable
+fun Questions(viewModel: QuestionsViewModel){
+    val questions = viewModel.data.value.data?.toMutableList()
+    Text("Questions: ${questions?.size}")
+    Log.d("SIZE", "Questions: ${questions?.size}")
+
 }

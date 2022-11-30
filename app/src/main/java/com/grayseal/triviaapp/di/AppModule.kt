@@ -2,6 +2,7 @@ package com.grayseal.triviaapp.di
 
 import com.grayseal.triviaapp.model.Question
 import com.grayseal.triviaapp.network.QuestionAPI
+import com.grayseal.triviaapp.repository.QuestionRepository
 import com.grayseal.triviaapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideQuestionRepository(api: QuestionAPI) = QuestionRepository(api)
+
     @Singleton
     @Provides
     fun provideQuestionsApi(): QuestionAPI {
