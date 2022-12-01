@@ -37,15 +37,11 @@ fun QuestionsUi(viewModel: QuestionsViewModel) {
     val questionIndex = remember {
         mutableStateOf(0)
     }
-    if (questions != null) {
-        QuestionCard(questionIndex = questionIndex, questions.size, viewModel)
-    }
+    QuestionCard(questionIndex = questionIndex, viewModel, questions)
 }
 
 @Composable
-fun Questions(viewModel: QuestionsViewModel, questionIndex: MutableState<Int>) {
-    val questions = viewModel.data.value.data?.toMutableList()
-
+fun Questions(viewModel: QuestionsViewModel, questionIndex: MutableState<Int>, questions:  MutableList<QuestionItem>?) {
     if (viewModel.data.value.loading == true) {
         ProgressIndicator()
     } else {
@@ -194,8 +190,10 @@ fun QuestionTracker(counter: Int = 10, outOf: Int = 100) {
 }
 
 @Composable
-fun QuestionCard(questionIndex: MutableState<Int>, totalQuestions: Int, viewModel: QuestionsViewModel) {
-    QuestionTracker(questionIndex.value, totalQuestions)
+fun QuestionCard(questionIndex: MutableState<Int>, viewModel: QuestionsViewModel, questions:  MutableList<QuestionItem>?) {
+    if (questions != null) {
+        QuestionTracker(questionIndex.value, viewModel.getTotalQuestions())
+    }
     if (questionIndex.value >= 3) {
         ShowProgress(score = questionIndex.value)
     }
@@ -222,7 +220,7 @@ fun QuestionCard(questionIndex: MutableState<Int>, totalQuestions: Int, viewMode
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(50.dp)
             ) {
-                DisplayQuestions(questionIndex = questionIndex, viewModel = viewModel)
+                DisplayQuestions(questionIndex = questionIndex, viewModel = viewModel, questions = questions)
             }
         }
         Box(
@@ -247,8 +245,9 @@ fun QuestionCard(questionIndex: MutableState<Int>, totalQuestions: Int, viewMode
 fun DisplayQuestions(
     viewModel: QuestionsViewModel,
     questionIndex: MutableState<Int>,
+    questions:  MutableList<QuestionItem>?
 ) {
-    Questions(viewModel = viewModel, questionIndex)
+    Questions(viewModel = viewModel, questionIndex, questions = questions)
 }
 
 @Composable
