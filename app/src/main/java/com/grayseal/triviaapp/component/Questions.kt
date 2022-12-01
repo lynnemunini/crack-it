@@ -1,15 +1,15 @@
 package com.grayseal.triviaapp.component
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,22 +17,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.grayseal.triviaapp.R
 import com.grayseal.triviaapp.model.QuestionItem
 import com.grayseal.triviaapp.screens.QuestionsViewModel
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 
+
 @Composable
-fun Questions(viewModel: QuestionsViewModel) {
+fun QuestionsUi() {
+    val questionIndex = remember {
+        mutableStateOf(0)
+    }
+    QuestionCard(questionIndex = questionIndex)
+}
+
+@Composable
+fun Questions(viewModel: QuestionsViewModel, questionIndex: MutableState<Int>) {
     val questions = viewModel.data.value.data?.toMutableList()
+
     if (viewModel.data.value.loading == true) {
         ProgressIndicator()
     } else {
+        val question = try {
+            questions?.get(questionIndex.value)
+        } catch (ex: Exception) {
+            null
+        }
         if (questions != null) {
-            QuestionDisplay(question = questions.first())
+            QuestionDisplay(
+                question = question!!,
+                questionIndex = questionIndex,
+                viewModel = viewModel
+            ) {
+                questionIndex.value = questionIndex.value + 1
+
+            }
         }
     }
 }
@@ -53,9 +80,9 @@ fun ProgressIndicator() {
 @Composable
 fun QuestionDisplay(
     question: QuestionItem,
-    //questionIndex: MutableState<Int>,
-    //viewModel: QuestionsViewModel,
-    onNextClicked: (Int) -> Unit = {}
+    questionIndex: MutableState<Int>,
+    viewModel: QuestionsViewModel,
+    onNextClicked: (Int) -> Unit = {},
 ) {
 
     val choicesState = remember(question) {
@@ -89,7 +116,7 @@ fun QuestionDisplay(
                     .fillMaxWidth()
                     .height(45.dp)
                     .border(
-                        width = 4.dp,
+                        width = 0.5.dp,
                         brush = Brush.linearGradient(
                             colors = listOf(
                                 Color(0xFFe4f0fe),
@@ -124,7 +151,30 @@ fun QuestionDisplay(
                 Text(text = answerText)
             }
         }
+    }
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        FilledTonalButton(
+            onClick = { onNextClicked(questionIndex.value) },
+            modifier = Modifier
+                .height(70.dp)
+                .width(150.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(3.dp, color = colors.onSurface)
+        ) {
+            androidx.compose.material.Text(
+                "Next",
+                color = Color.White,
+                fontFamily = sonoFamily,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.SemiBold
+            )
 
+        }
     }
 }
 
@@ -142,3 +192,59 @@ fun QuestionTracker(counter: Int = 10, outOf: Int = 100) {
         )
     }
 }
+
+@Composable
+fun QuestionCard(questionIndex: MutableState<Int>) {
+    QuestionTracker(questionIndex.value)
+    ConstraintLayout(
+        modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+    ) {
+        val (illustration, card) = createRefs()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .constrainAs(card) {
+                    top.linkTo(illustration.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+        ) {
+            ElevatedCard(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 120.dp),
+                shape = RoundedCornerShape(30.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(50.dp)
+            ) {
+                DisplayQuestions(questionIndex = questionIndex)
+            }
+        }
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .constrainAs(illustration) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                }
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.fall),
+                contentDescription = "Question Illustration"
+            )
+        }
+    }
+}
+
+@Composable
+fun DisplayQuestions(
+    viewModel: QuestionsViewModel = hiltViewModel(),
+    questionIndex: MutableState<Int>,
+) {
+    Questions(viewModel = viewModel, questionIndex)
+}
+

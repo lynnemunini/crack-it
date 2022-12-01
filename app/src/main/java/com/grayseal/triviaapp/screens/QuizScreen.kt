@@ -1,35 +1,22 @@
 package com.grayseal.triviaapp.screens
 
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.grayseal.triviaapp.R
-import com.grayseal.triviaapp.component.QuestionTracker
-import com.grayseal.triviaapp.component.Questions
+import com.grayseal.triviaapp.component.QuestionsUi
 import com.grayseal.triviaapp.navigation.QuizScreens
-import com.grayseal.triviaapp.ui.theme.sonoFamily
 import com.grayseal.triviaapp.utils.shakeClickEffect
 
 
@@ -41,10 +28,8 @@ fun QuizScreen(navController: NavController) {
             .background(color = colors.secondary)
     ) {
         CancelButton(navController = navController)
-        QuestionTracker()
-        QuestionCard(navController = navController)
+        QuestionsUi()
     }
-
 }
 
 @Composable
@@ -68,84 +53,6 @@ fun CancelButton(navController: NavController) {
                 contentDescription = "Cancel",
                 tint = Color.White
             )
-        }
-    }
-}
-
-@Composable
-fun QuestionCard(navController: NavController) {
-    ConstraintLayout(
-        modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-    ) {
-        val (illustration, card) = createRefs()
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .constrainAs(card) {
-                    top.linkTo(illustration.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
-        ) {
-            ElevatedCard(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 120.dp),
-                shape = RoundedCornerShape(30.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(50.dp)
-                ){
-                DisplayQuestions()
-                NextButton(action = "Next", navController = navController)
-            }
-        }
-        Box(
-            modifier = Modifier
-                .size(150.dp)
-                .constrainAs(illustration) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.fall),
-                contentDescription = "Question Illustration"
-            )
-        }
-    }
-}
-
-@Composable
-fun DisplayQuestions(viewModel: QuestionsViewModel = hiltViewModel()){
-    Questions(viewModel = viewModel)
-}
-
-@Composable
-fun NextButton(action: String, navController: NavController) {
-    Row(
-        modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom){
-        FilledTonalButton(
-            onClick = {navController.navigate(route = QuizScreens.QuizScreen.name)},
-            modifier = Modifier
-                .height(70.dp)
-                .width(150.dp)
-            ,
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.primary),
-            shape = RoundedCornerShape(8.dp),
-            border = BorderStroke(3.dp, color = MaterialTheme.colors.onSurface)
-        ) {
-            androidx.compose.material.Text(
-                action,
-                color = Color.White,
-                fontFamily = sonoFamily,
-                fontSize = 19.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-
         }
     }
 }
