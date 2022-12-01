@@ -21,14 +21,14 @@ import com.grayseal.triviaapp.utils.shakeClickEffect
 
 
 @Composable
-fun QuizScreen(navController: NavController) {
+fun QuizScreen(navController: NavController, viewModel: QuestionsViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = colors.secondary)
     ) {
         CancelButton(navController = navController)
-        QuestionsUi()
+        QuestionsUi(viewModel)
     }
 }
 

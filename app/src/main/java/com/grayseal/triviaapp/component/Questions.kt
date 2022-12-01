@@ -32,11 +32,14 @@ import com.grayseal.triviaapp.ui.theme.sonoFamily
 
 
 @Composable
-fun QuestionsUi() {
+fun QuestionsUi(viewModel: QuestionsViewModel) {
+    val questions = viewModel.data.value.data?.toMutableList()
     val questionIndex = remember {
         mutableStateOf(0)
     }
-    QuestionCard(questionIndex = questionIndex)
+    if (questions != null) {
+        QuestionCard(questionIndex = questionIndex, questions.size, viewModel)
+    }
 }
 
 @Composable
@@ -55,7 +58,6 @@ fun Questions(viewModel: QuestionsViewModel, questionIndex: MutableState<Int>) {
             QuestionDisplay(
                 question = question!!,
                 questionIndex = questionIndex,
-                viewModel = viewModel
             ) {
                 questionIndex.value = questionIndex.value + 1
 
@@ -81,7 +83,6 @@ fun ProgressIndicator() {
 fun QuestionDisplay(
     question: QuestionItem,
     questionIndex: MutableState<Int>,
-    viewModel: QuestionsViewModel,
     onNextClicked: (Int) -> Unit = {},
 ) {
 
@@ -173,7 +174,6 @@ fun QuestionDisplay(
                 fontSize = 19.sp,
                 fontWeight = FontWeight.SemiBold
             )
-
         }
     }
 }
@@ -194,8 +194,11 @@ fun QuestionTracker(counter: Int = 10, outOf: Int = 100) {
 }
 
 @Composable
-fun QuestionCard(questionIndex: MutableState<Int>) {
-    QuestionTracker(questionIndex.value)
+fun QuestionCard(questionIndex: MutableState<Int>, totalQuestions: Int, viewModel: QuestionsViewModel) {
+    QuestionTracker(questionIndex.value, totalQuestions)
+    if (questionIndex.value >= 3) {
+        ShowProgress(score = questionIndex.value)
+    }
     ConstraintLayout(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
@@ -219,7 +222,7 @@ fun QuestionCard(questionIndex: MutableState<Int>) {
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(50.dp)
             ) {
-                DisplayQuestions(questionIndex = questionIndex)
+                DisplayQuestions(questionIndex = questionIndex, viewModel = viewModel)
             }
         }
         Box(
@@ -242,9 +245,45 @@ fun QuestionCard(questionIndex: MutableState<Int>) {
 
 @Composable
 fun DisplayQuestions(
-    viewModel: QuestionsViewModel = hiltViewModel(),
+    viewModel: QuestionsViewModel,
     questionIndex: MutableState<Int>,
 ) {
     Questions(viewModel = viewModel, questionIndex)
 }
 
+@Composable
+fun ShowProgress(score: Int) {
+    val progressFactor = remember(score) {
+        mutableStateOf(score * 0.005f)
+    }
+    Row(
+        modifier = Modifier
+            .padding(3.dp)
+            .fillMaxWidth(progressFactor.value)
+            .height(20.dp)
+            .border(width = 4.dp, color = colors.primary, shape = RoundedCornerShape(5.dp))
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = 50,
+                    topEndPercent = 50,
+                    bottomEndPercent = 50,
+                    bottomStartPercent = 50
+                )
+            )
+            .background(Color.Transparent), verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            contentPadding = PaddingValues(1.dp),
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colors.primary),
+            enabled = false,
+            elevation = null,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        ) {
+
+        }
+
+    }
+}
