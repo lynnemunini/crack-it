@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.sharp.Close
@@ -30,8 +31,6 @@ import com.grayseal.triviaapp.component.Questions
 import com.grayseal.triviaapp.navigation.QuizScreens
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 import com.grayseal.triviaapp.utils.shakeClickEffect
-import com.grayseal.triviaapp.widgets.ProceedButton
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 
 @Composable
@@ -98,10 +97,8 @@ fun QuestionCard(navController: NavController) {
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(50.dp)
                 ){
-                Column(modifier = Modifier.padding(top = 80.dp, start = 10.dp, end = 10.dp)) {
-                    DisplayQuestions()
-                }
-                ProceedButton(action = "Next", navController = navController)
+                DisplayQuestions()
+                NextButton(action = "Next", navController = navController)
             }
         }
         Box(
@@ -127,3 +124,28 @@ fun DisplayQuestions(viewModel: QuestionsViewModel = hiltViewModel()){
     Questions(viewModel = viewModel)
 }
 
+@Composable
+fun NextButton(action: String, navController: NavController) {
+    Row(
+        modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom){
+        FilledTonalButton(
+            onClick = {navController.navigate(route = QuizScreens.QuizScreen.name)},
+            modifier = Modifier
+                .height(70.dp)
+                .width(150.dp)
+            ,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colors.primary),
+            shape = RoundedCornerShape(8.dp),
+            border = BorderStroke(3.dp, color = MaterialTheme.colors.onSurface)
+        ) {
+            androidx.compose.material.Text(
+                action,
+                color = Color.White,
+                fontFamily = sonoFamily,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+        }
+    }
+}
