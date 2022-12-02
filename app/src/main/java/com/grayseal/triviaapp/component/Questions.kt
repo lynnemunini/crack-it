@@ -109,7 +109,7 @@ fun QuestionDisplay(
                 Text(
                     text = question.question,
                     modifier = Modifier
-                        .align(Alignment.Start)gi.padding(bottom = 20.dp),
+                        .align(Alignment.Start).padding(bottom = 20.dp),
                     fontSize = 17.sp,
                     color = colors.onPrimary,
                     fontWeight = FontWeight.Bold,
