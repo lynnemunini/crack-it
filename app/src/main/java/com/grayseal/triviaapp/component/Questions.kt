@@ -1,7 +1,9 @@
 package com.grayseal.triviaapp.component
 
+import android.content.ClipData
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
@@ -58,7 +60,6 @@ fun Questions(
                 questionIndex = questionIndex,
             ) {
                 questionIndex.value = questionIndex.value + 1
-
             }
         }
     }
@@ -102,18 +103,20 @@ fun QuestionDisplay(
         }
     }
     Column(modifier = Modifier.padding(top = 80.dp, start = 20.dp, end = 20.dp)) {
-        Text(
-            text = question.question,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .fillMaxHeight(0.3f),
-            fontSize = 17.sp,
-            color = colors.onPrimary,
-            fontWeight = FontWeight.Bold,
-            fontFamily = sonoFamily,
-            lineHeight = 22.sp
-        )
 
+        LazyColumn() {
+            item {
+                Text(
+                    text = question.question,
+                    modifier = Modifier
+                        .align(Alignment.Start)gi.padding(bottom = 20.dp),
+                    fontSize = 17.sp,
+                    color = colors.onPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = sonoFamily,
+                )
+            }
+        }
         choicesState.forEachIndexed { index, answerText ->
             Row(
                 if (correctAnswerState.value == true && index == answerState.value)
@@ -121,17 +124,6 @@ fun QuestionDisplay(
                         .fillMaxWidth()
                         .height(65.dp)
                         .padding(bottom = 10.dp)
-                        .border(
-                            width = 0.5.dp,
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFFe4f0fe),
-                                    Color(0xFFe4f0fe),
-                                    Color(0xFFe4f0fe)
-                                )
-                            ),
-                            shape = RoundedCornerShape(10.dp)
-                        )
                         .clip(
                             RoundedCornerShape(10)
                         )
@@ -174,6 +166,7 @@ fun QuestionDisplay(
                         text = answerText,
                         modifier = Modifier.padding(10.dp),
                         fontSize = 16.sp,
+                        fontFamily = sonoFamily,
                         color = Color.White
                     )
                 }
@@ -182,7 +175,8 @@ fun QuestionDisplay(
                         text = answerText,
                         modifier = Modifier.padding(10.dp),
                         fontSize = 16.sp,
-                        color = Color.DarkGray
+                        fontFamily = sonoFamily,
+                        color = Color.Gray
                     )
             }
         }
