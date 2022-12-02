@@ -16,8 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -25,8 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.grayseal.triviaapp.R
 import com.grayseal.triviaapp.navigation.QuizScreens
-import com.grayseal.triviaapp.ui.theme.montserratFamily
-import com.grayseal.triviaapp.ui.theme.notoSansFamily
 import com.grayseal.triviaapp.ui.theme.sonoFamily
 
 @Composable
@@ -69,7 +65,12 @@ fun SplashScreen(navController: NavController) {
         )
         Text(
             "Interactive fun quizzes to help you learn interesting facts and shocking truths and help you get into a habit of learning.",
-            style = (TextStyle(fontSize = 15.sp, color = Color.Gray, fontFamily = sonoFamily, lineHeight = 18.sp )),
+            style = (TextStyle(
+                fontSize = 15.sp,
+                color = Color.Gray,
+                fontFamily = sonoFamily,
+                lineHeight = 18.sp
+            )),
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp)
         )

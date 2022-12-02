@@ -1,9 +1,7 @@
 package com.grayseal.triviaapp.component
 
-import android.content.ClipData
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
@@ -104,16 +102,17 @@ fun QuestionDisplay(
     }
     Column(modifier = Modifier.padding(top = 80.dp, start = 20.dp, end = 20.dp)) {
 
-                Text(
-                    text = question.question,
-                    modifier = Modifier
-                        .align(Alignment.Start).padding(bottom = 20.dp),
-                    fontSize = 17.sp,
-                    color = colors.onPrimary,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = sonoFamily,
-                    lineHeight = 22.sp,
-                )
+        Text(
+            text = question.question,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 20.dp),
+            fontSize = 17.sp,
+            color = colors.onPrimary,
+            fontWeight = FontWeight.Bold,
+            fontFamily = sonoFamily,
+            lineHeight = 22.sp,
+        )
         choicesState.forEachIndexed { index, answerText ->
             Row(
                 if (correctAnswerState.value == true && index == answerState.value)
@@ -166,8 +165,7 @@ fun QuestionDisplay(
                         fontFamily = sonoFamily,
                         color = Color.White
                     )
-                }
-                else
+                } else
                     Text(
                         text = answerText,
                         modifier = Modifier.padding(10.dp),
