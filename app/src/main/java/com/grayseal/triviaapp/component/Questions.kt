@@ -1,12 +1,11 @@
 package com.grayseal.triviaapp.component
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.grayseal.triviaapp.R
 import com.grayseal.triviaapp.model.QuestionItem
 import com.grayseal.triviaapp.screens.QuestionsViewModel
@@ -41,7 +39,11 @@ fun QuestionsUi(viewModel: QuestionsViewModel) {
 }
 
 @Composable
-fun Questions(viewModel: QuestionsViewModel, questionIndex: MutableState<Int>, questions:  MutableList<QuestionItem>?) {
+fun Questions(
+    viewModel: QuestionsViewModel,
+    questionIndex: MutableState<Int>,
+    questions: MutableList<QuestionItem>?
+) {
     if (viewModel.data.value.loading == true) {
         ProgressIndicator()
     } else {
@@ -101,51 +103,87 @@ fun QuestionDisplay(
     }
     Column(modifier = Modifier.padding(top = 80.dp, start = 20.dp, end = 20.dp)) {
         Text(
-            text = question.question, modifier = Modifier
+            text = question.question,
+            modifier = Modifier
                 .align(Alignment.Start)
                 .fillMaxHeight(0.3f),
-            fontSize = 17.sp, color = Color.Black, fontWeight = FontWeight.Bold, lineHeight = 22.sp
+            fontSize = 17.sp,
+            color = colors.onPrimary,
+            fontWeight = FontWeight.Bold,
+            fontFamily = sonoFamily,
+            lineHeight = 22.sp
         )
 
         choicesState.forEachIndexed { index, answerText ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(45.dp)
-                    .border(
-                        width = 0.5.dp,
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFFe4f0fe),
-                                Color(0xFFe4f0fe),
-                                Color(0xFFe4f0fe)
-                            )
-                        ),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .clip(
-                        RoundedCornerShape(
-                            topStartPercent = 50,
-                            topEndPercent = 50,
-                            bottomEndPercent = 50,
-                            bottomStartPercent = 50
+                if (correctAnswerState.value == true && index == answerState.value)
+                    Modifier
+                        .fillMaxWidth()
+                        .height(65.dp)
+                        .padding(bottom = 10.dp)
+                        .border(
+                            width = 0.5.dp,
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFFe4f0fe),
+                                    Color(0xFFe4f0fe),
+                                    Color(0xFFe4f0fe)
+                                )
+                            ),
+                            shape = RoundedCornerShape(10.dp)
                         )
-                    )
-                    .background(Color.Transparent), verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = (answerState.value == index), onClick = {
-                        updateAnswer(index)
-                    },
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = if (correctAnswerState.value == true && index == answerState.value) {
-                            colors.primary
-                        } else {
-                            Color.White
+                        .clip(
+                            RoundedCornerShape(10)
+                        )
+                        .background(color = colors.primary)
+                        .clickable {
+                            updateAnswer(index)
                         }
+                else
+                    Modifier
+                        .fillMaxWidth()
+                        .height(65.dp)
+                        .padding(bottom = 10.dp)
+                        .border(
+                            width = 0.5.dp,
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFFe4f0fe),
+                                    Color(0xFFe4f0fe),
+                                    Color(0xFFe4f0fe)
+                                )
+                            ),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .clip(
+                            RoundedCornerShape(10)
+                        )
+                        .background(color = Color.Transparent)
+                        .clickable {
+                            updateAnswer(index)
+                        }, verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (correctAnswerState.value == true && index == answerState.value) {
+                    Icon(
+                        imageVector = Icons.Outlined.CheckCircle,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.padding(start = 10.dp)
                     )
-                )
-                Text(text = answerText)
+                    Text(
+                        text = answerText,
+                        modifier = Modifier.padding(10.dp),
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
+                }
+                else
+                    Text(
+                        text = answerText,
+                        modifier = Modifier.padding(10.dp),
+                        fontSize = 16.sp,
+                        color = Color.DarkGray
+                    )
             }
         }
     }
@@ -190,13 +228,21 @@ fun QuestionTracker(counter: Int = 10, outOf: Int = 100) {
 }
 
 @Composable
-fun QuestionCard(questionIndex: MutableState<Int>, viewModel: QuestionsViewModel, questions:  MutableList<QuestionItem>?) {
+fun QuestionCard(
+    questionIndex: MutableState<Int>,
+    viewModel: QuestionsViewModel,
+    questions: MutableList<QuestionItem>?
+) {
     if (questions != null) {
         QuestionTracker(questionIndex.value, viewModel.getTotalQuestions())
     }
     if (questionIndex.value >= 1) {
         ShowProgress(score = questionIndex.value)
     }
+    if (questionIndex.value == 25) {
+        questionIndex.value = questionIndex.value + 1
+    }
+
     ConstraintLayout(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
@@ -215,12 +261,16 @@ fun QuestionCard(questionIndex: MutableState<Int>, viewModel: QuestionsViewModel
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 120.dp),
+                    .padding(bottom = 90.dp),
                 shape = RoundedCornerShape(30.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(50.dp)
             ) {
-                DisplayQuestions(questionIndex = questionIndex, viewModel = viewModel, questions = questions)
+                DisplayQuestions(
+                    questionIndex = questionIndex,
+                    viewModel = viewModel,
+                    questions = questions
+                )
             }
         }
         Box(
@@ -245,7 +295,7 @@ fun QuestionCard(questionIndex: MutableState<Int>, viewModel: QuestionsViewModel
 fun DisplayQuestions(
     viewModel: QuestionsViewModel,
     questionIndex: MutableState<Int>,
-    questions:  MutableList<QuestionItem>?
+    questions: MutableList<QuestionItem>?
 ) {
     Questions(viewModel = viewModel, questionIndex, questions = questions)
 }

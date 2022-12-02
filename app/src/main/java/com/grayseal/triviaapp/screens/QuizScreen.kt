@@ -37,7 +37,7 @@ fun CancelButton(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, bottom = 20.dp),
+            .padding(top = 20.dp, bottom = 15.dp),
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Top
     ) {
