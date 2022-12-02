@@ -182,7 +182,7 @@ fun QuestionTracker(counter: Int = 10, outOf: Int = 100) {
     ) {
         Text(
             text = "Question $counter/$outOf",
-            style = (TextStyle(fontSize = 18.sp, color = Color.White)),
+            style = (TextStyle(fontSize = 17.sp, color = Color.White)),
             fontFamily = sonoFamily,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
@@ -194,7 +194,7 @@ fun QuestionCard(questionIndex: MutableState<Int>, viewModel: QuestionsViewModel
     if (questions != null) {
         QuestionTracker(questionIndex.value, viewModel.getTotalQuestions())
     }
-    if (questionIndex.value >= 3) {
+    if (questionIndex.value >= 1) {
         ShowProgress(score = questionIndex.value)
     }
     ConstraintLayout(
@@ -253,14 +253,13 @@ fun DisplayQuestions(
 @Composable
 fun ShowProgress(score: Int) {
     val progressFactor = remember(score) {
-        mutableStateOf(score * 0.005f)
+        mutableStateOf(score * 0.0005f)
     }
     Row(
         modifier = Modifier
-            .padding(3.dp)
-            .fillMaxWidth(progressFactor.value)
-            .height(20.dp)
-            .border(width = 4.dp, color = colors.primary, shape = RoundedCornerShape(5.dp))
+            .padding(top = 10.dp, start = 20.dp, end = 20.dp)
+            .fillMaxWidth()
+            .height(10.dp)
             .clip(
                 RoundedCornerShape(
                     topStartPercent = 50,
@@ -269,20 +268,17 @@ fun ShowProgress(score: Int) {
                     bottomStartPercent = 50
                 )
             )
-            .background(Color.Transparent), verticalAlignment = Alignment.CenterVertically
+            .background(Color(0xFF9da1e7)), verticalAlignment = Alignment.CenterVertically
     ) {
         Button(
-            contentPadding = PaddingValues(1.dp),
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .fillMaxWidth()
-                .background(colors.primary),
+                .fillMaxWidth(progressFactor.value),
             enabled = false,
             elevation = null,
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+            colors = ButtonDefaults.buttonColors(disabledContainerColor = colors.primary)
         ) {
 
         }
-
     }
 }
