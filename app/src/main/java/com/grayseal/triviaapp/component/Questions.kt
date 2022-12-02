@@ -104,8 +104,6 @@ fun QuestionDisplay(
     }
     Column(modifier = Modifier.padding(top = 80.dp, start = 20.dp, end = 20.dp)) {
 
-        LazyColumn() {
-            item {
                 Text(
                     text = question.question,
                     modifier = Modifier
@@ -114,9 +112,8 @@ fun QuestionDisplay(
                     color = colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontFamily = sonoFamily,
+                    lineHeight = 22.sp,
                 )
-            }
-        }
         choicesState.forEachIndexed { index, answerText ->
             Row(
                 if (correctAnswerState.value == true && index == answerState.value)
